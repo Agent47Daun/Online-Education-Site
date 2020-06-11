@@ -137,7 +137,7 @@ REST_FRAMEWORK = {
 # Celery
 BROKER_URL = os.getenv("BROKER_URL", 'redis://localhost:6379')
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", 'redis://localhost:6379')
-CELERY_ACCEPT_CONTENT = os.getenv("CELERY_ACCEPT_CONTENT", ['application/json'])
+# CELERY_ACCEPT_CONTENT = os.getenv("CELERY_ACCEPT_CONTENT", ['application/json'])
 CELERY_TASK_SERIALIZER = os.getenv("CELERY_TASK_SERIALIZER", 'json')
 CELERY_RESULT_SERIALIZER = os.getenv("CELERY_RESULT_SERIALIZER", 'json')
 CELERY_TIMEZONE = os.getenv("CELERY_TIMEZONE", 'Europe/Moscow')
