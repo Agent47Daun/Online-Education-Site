@@ -9,6 +9,9 @@ verify_ssl = true
 django = "*"
 celery = "*"
 psycopg2-binary = "*"
+djoser = "*"
+django-rest-knox = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.8"
