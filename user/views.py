@@ -1,15 +1,16 @@
-from django.shortcuts import render
+from django.contrib.auth import login
 
-from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
-
-from .tasks import test
-
-# Create your views here.
+from rest_framework import permissions
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from knox.views import LoginView as KnoxLoginView
 
 
-class TestApiView(GenericAPIView):
+class LoginView(KnoxLoginView):
+    permission_classes = (permissions.AllowAny,)
 
-    def get(self, request):
-        test.delay()
-        return Response("ok", 200)
+    def post(self, request, format=None):
+        serializer = AuthTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request, user)
+        return super(LoginView, self).post(request, format=None)
