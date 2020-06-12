@@ -143,3 +143,8 @@ CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", 'redis://localhost:63
 CELERY_TASK_SERIALIZER = os.getenv("CELERY_TASK_SERIALIZER", 'json')
 CELERY_RESULT_SERIALIZER = os.getenv("CELERY_RESULT_SERIALIZER", 'json')
 CELERY_TIMEZONE = os.getenv("CELERY_TIMEZONE", 'Europe/Moscow')
+
+# Locale
+LOCALE_PATHS = (
+    os.path.join(os.path.dirname(__file__), "locale"),
+)
