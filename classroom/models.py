@@ -10,4 +10,10 @@ class Classroom(models.Model):
                                 related_name="classrooms")
     students = models.ManyToManyField(StudentAccount,
                                       related_name="classrooms")
-    
+
+
+class Lesson(models.Model):
+    classroom = models.ForeignKey(Classroom,
+                                  on_delete=models.CASCADE,
+                                  related_name="lesson")
+    oral_part = models.TextField(max_length=5000)
