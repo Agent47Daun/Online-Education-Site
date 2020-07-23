@@ -10,7 +10,7 @@ def create_and_save_additional_accounts(sender, instance, created, **kwargs):
             student_account = StudentAccount.objects.create()
             instance.student_account = student_account
             instance.student_account.save()
-            
+
         else:
             teacher_account = TeacherAccount.objects.create()
             instance.teacher_account = teacher_account

@@ -10,6 +10,7 @@ class Classroom(models.Model):
                                 related_name="classrooms")
     students = models.ManyToManyField(StudentAccount,
                                       related_name="classrooms")
+    name = models.TextField(max_length=50)
 
 
 class Lesson(models.Model):
