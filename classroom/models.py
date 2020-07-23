@@ -15,5 +15,19 @@ class Classroom(models.Model):
 class Lesson(models.Model):
     classroom = models.ForeignKey(Classroom,
                                   on_delete=models.CASCADE,
-                                  related_name="lesson")
+                                  related_name="lessons")
     oral_part = models.TextField(max_length=5000)
+
+
+class Task(models.Model):
+    lesson = models.ForeignKey(Lesson,
+                               on_delete=models.CASCADE,
+                               related_name="tasks")
+    text = models.TextField(max_length=250)
+
+class Answer(models.Model):
+    task = models.ForeignKey(Task,
+                             on_delete=models.CASCADE,
+                             related_name="answers")
+    text = models.TextField(max_length=250)
+    is_correct = models.BooleanField(default=False)
