@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import ClassroomApiView
 
 router = DefaultRouter()
-router.register('classroom', ClassroomApiView)
+router.register('', ClassroomApiView)
 
 
 urlpatterns = [

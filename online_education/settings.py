@@ -133,6 +133,13 @@ REST_FRAMEWORK = {
 # Knox
 TOKEN_TTL = None  # never expired token
 
+# Djoser
+DJOSER = {
+    "SERIALIZERS": {
+        'user': "user.serializers.UserSerializer",
+        'current_user': "user.serializers.UserSerializer"
+    }
+}
 
 # Celery
 BROKER_URL = os.getenv("BROKER_URL", 'redis://localhost:6379')
