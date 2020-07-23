@@ -7,13 +7,17 @@ from django.contrib.auth.models import AbstractUser
 class StudentAccount(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
-                                related_name='student_account')
+                                related_name='student_account',
+                                blank=True,
+                                null=True)
 
 
 class TeacherAccount(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
-                                related_name='teacher_account')
+                                related_name='teacher_account',
+                                blank=True,
+                                null=True)
 
 
 class User(AbstractUser):
