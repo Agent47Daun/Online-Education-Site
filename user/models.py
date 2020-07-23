@@ -21,8 +21,19 @@ class TeacherAccount(models.Model):
 
 
 class User(AbstractUser):
+    STUDENT = 0
+    TEACHER = 1
+    account_type_choices = (
+        (STUDENT, "Student"),
+        (TEACHER, "Teacher")
+    )
 
+    REQUIRED_FIELDS = ["email", "account_type", "first_name", "last_name"]
+
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
+    account_type = models.IntegerField(choices=account_type_choices, default=STUDENT)
 
     class Meta:
         verbose_name = "Пользователь"

@@ -25,6 +25,7 @@ class Task(models.Model):
                                related_name="tasks")
     text = models.TextField(max_length=250)
 
+
 class Answer(models.Model):
     task = models.ForeignKey(Task,
                              on_delete=models.CASCADE,
