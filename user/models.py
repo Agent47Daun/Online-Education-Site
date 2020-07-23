@@ -30,9 +30,11 @@ class User(AbstractUser):
 
     REQUIRED_FIELDS = ["email", "account_type", "first_name", "last_name"]
 
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=150, null=False, blank=False, unique=True)
+
+    first_name = models.CharField(max_length=50, null=False, blank=False)
+    last_name = models.CharField(max_length=50, null=False, blank=False)
+    email = models.EmailField(unique=True, null=False, blank=False)
     account_type = models.IntegerField(choices=account_type_choices, default=STUDENT)
 
     class Meta:

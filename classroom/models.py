@@ -29,6 +29,7 @@ class Task(models.Model):
 class Answer(models.Model):
     task = models.ForeignKey(Task,
                              on_delete=models.CASCADE,
-                             related_name="answers")
-    text = models.TextField(max_length=250)
+                             related_name="answers",
+                             null=False, blank=False)
+    text = models.TextField(max_length=250, null=False, blank=False)
     is_correct = models.BooleanField(default=False)
