@@ -129,6 +129,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
 }
 
+# Knox
+TOKEN_TTL = None  # never expired token
+
 
 # Celery
 BROKER_URL = os.getenv("BROKER_URL", 'redis://localhost:6379')
