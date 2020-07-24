@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-# Create your models here.
+from django.utils.functional import cached_property
 
 
 class StudentAccount(models.Model):
@@ -42,6 +42,14 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(unique=True, null=False, blank=False)
     account_type = models.IntegerField(choices=account_type_choices, default=STUDENT)
+
+    @cached_property
+    def is_student(self):
+        return self.account_type == 0
+
+    @cached_property
+    def is_teacher(self):
+        return self.account_type == 1
 
     class Meta:
         verbose_name = "Пользователь"
