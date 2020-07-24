@@ -12,3 +12,10 @@ class ClassroomCreateListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Classroom
         fields = ['name', 'teacher', 'students']
+
+    def create(self, validated_data):
+
+        if self.context['request'].user.is_teacher:
+            return super().create(validated_data)
+        else:
+            raise serializers.ValidationError({"detail": "Класс может быть создан только учителем."})

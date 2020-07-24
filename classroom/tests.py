@@ -30,7 +30,13 @@ class ClassroomApiTest(APITestCase):
         response = self.client.get(self.url)
         self.assertEqual(200, response.status_code)
 
-    def test_classroom_create(self):
+    def test_classroom_create_as_student(self):
+        self.client.force_login(self.user_student)
+
+        response = self.client.post(self.url, {"name": "test_classroom", "teacher": self.user_teacher.teacher_account.id, "students": [self.user_student.student_account.id]})
+        self.assertEqual(400, response.status_code)
+
+    def test_classroom_create_as_teacher(self):
         self.client.force_login(self.user_teacher)
 
         response = self.client.post(self.url, {"name": "test_classroom", "teacher": self.user_teacher.teacher_account.id, "students": [self.user_student.student_account.id]})
