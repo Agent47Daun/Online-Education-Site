@@ -20,8 +20,12 @@ class ClassroomCreateListApiView(generics.ListCreateAPIView):
         return queryset
 
 
-class ClassroomAddLesson(APIView):
+class ClassroomAddLesson(generics.CreateAPIView):
+    serializer_class = LessonSerializer
 
-    def post(self, request, id):
-        data = LessonSerializer(request.data)
-        return Response(data.data)
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        uri = self.request.build_absolute_uri()
+        classroom_id = uri.split("/")[-3]
+        context.update({'classroom_id': classroom_id})
+        return context

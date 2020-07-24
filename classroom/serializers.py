@@ -20,23 +20,55 @@ class ClassroomCreateListSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError({"detail": "Класс может быть создан только учителем."})
 
+class AnswerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Answer
+        fields = ['text', 'is_correct',]
+
+        extra_kwargs = {
+            "is_correct": {
+                "required": True
+            }
+        }
+
 
 class TaskSerializer(serializers.ModelSerializer):
 
+    answers = AnswerSerializer(many=True)
+
     class Meta:
         model = Task
-        fields = ['text', 'lesson']
+        fields = ['text', "answers"]
 
 
 class LessonSerializer(serializers.ModelSerializer):
 
+    tasks = TaskSerializer(many=True)
+
     class Meta:
         model = Lesson
-        fields = ['oral_part', 'tasks']
+        fields = ['oral_part', 'name', 'tasks']
 
+#{'oral_part': 'He', 'name': 'How to..', 'tasks': [OrderedDict([('text', 'How to test?'), ('answers', [OrderedDict([('text', 'Like this!'), ('is_correct', False)]), OrderedDict([('text', 'Maybe like this?'), ('is_correct', True)])])])]}
 
-class AnswerSrializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        classroom_id = self.context['classroom_id']
+        classroom = Classroom.objects.get(id=classroom_id)
+        lesson = Lesson.objects.create(classroom=classroom, name=validated_data['name'], oral_part=validated_data['oral_part'])
 
-    class Meta:
-        model = Answer
-        fields = ['text', 'is_correct', 'task']
+        for task in validated_data['tasks']:
+            task_instance = Task.objects.create(text=task['text'], lesson=lesson)
+            answers = []
+            for answer in task['answers']:
+                answers.append(Answer.objects.create(text=answer['text'], is_correct=answer['is_correct'], task=task_instance))
+            task_instance.save()
+
+        return lesson
+
+    def validate(self, validated_data):      
+        classroom_id = self.context.get("classroom_id")
+        if not Classroom.objects.filter(id=classroom_id).exists():
+            raise serializers.ValidationError({"detail": "Не найден класс с таким ID."}, 400)
+
+        return validated_data
