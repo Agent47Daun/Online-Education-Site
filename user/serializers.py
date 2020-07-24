@@ -7,7 +7,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeacherAccount
-        fields = ['id', 'classrooms', 'user']
+        fields = ['id', 'classrooms', 'user_id']
 
         extra_kwargs = {
             "classrooms": {
@@ -20,7 +20,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StudentAccount
-        fields = ['id', 'classrooms', 'user']
+        fields = ['id', 'classrooms', 'user_id']
 
         extra_kwargs = {
             "classrooms": {

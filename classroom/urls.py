@@ -1,8 +1,6 @@
 from django.urls import path, include
 
-def do_nothing(request):
-    pass
-
+from .views import ClassroomCreateListApiView
 urlpatterns = [
-    path('', do_nothing)
+    path('', ClassroomCreateListApiView.as_view(), name="classroom_list_create")
 ]
