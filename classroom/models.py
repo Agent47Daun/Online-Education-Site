@@ -18,6 +18,7 @@ class Lesson(models.Model):
                                   on_delete=models.CASCADE,
                                   related_name="lessons")
     oral_part = models.TextField(max_length=5000)
+    name = models.TextField(max_length=100)
 
 
 class Task(models.Model):
