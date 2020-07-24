@@ -3,6 +3,7 @@ from django.dispatch import receiver
 
 from user.models import User, StudentAccount, TeacherAccount
 
+
 @receiver(post_save, sender=User)
 def create_and_save_additional_accounts(sender, instance, created, **kwargs):
     if created:

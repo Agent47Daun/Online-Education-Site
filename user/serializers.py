@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import User, StudentAccount, TeacherAccount
 
+
 class TeacherSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -14,6 +15,7 @@ class TeacherSerializer(serializers.ModelSerializer):
             }
         }
 
+
 class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -25,6 +27,7 @@ class StudentSerializer(serializers.ModelSerializer):
                 "read_only": "True"
             }
         }
+
 
 class UserSerializer(serializers.ModelSerializer):
 
