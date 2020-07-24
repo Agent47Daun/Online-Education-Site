@@ -11,6 +11,9 @@ class StudentAccount(models.Model):
                                 blank=True,
                                 null=True)
 
+    def __str__(self):
+        return "Student:{} {}".format(self.user.username, self.id)
+
 
 class TeacherAccount(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
@@ -18,6 +21,9 @@ class TeacherAccount(models.Model):
                                 related_name='teacher_account',
                                 blank=True,
                                 null=True)
+
+    def __str__(self):
+        return "Teacher: {} {}".format(self.user.username, self.id)
 
 
 class User(AbstractUser):

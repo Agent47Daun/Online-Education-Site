@@ -6,15 +6,25 @@ class TeacherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeacherAccount
-        fields = ['classrooms', 'user']
+        fields = ['id', 'classrooms', 'user']
 
+        extra_kwargs = {
+            "classrooms": {
+                "read_only": "True"
+            }
+        }
 
 class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StudentAccount
-        fields = ['classrooms', 'user']
+        fields = ['id', 'classrooms', 'user']
 
+        extra_kwargs = {
+            "classrooms": {
+                "read_only": "True"
+            }
+        }
 
 class UserSerializer(serializers.ModelSerializer):
 
