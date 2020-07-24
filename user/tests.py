@@ -12,6 +12,8 @@ class UserRegistrationTest(APITestCase):
         user_data = {
             "username": "test_username",
             "password": "test_password",
+            "first_name": "test_first_name",
+            "last_name": "test_last_name",
             "email": "test_user@test.com"
         }
 
@@ -22,6 +24,8 @@ class UserRegistrationTest(APITestCase):
         user_data = {
             "username": "test_username",
             "password": "test_password",
+            "first_name": "test_first_name",
+            "last_name": "test_last_name",
             "email": "test_user@test.com"
         }
         response = self.client.post(self.url, user_data)
@@ -31,6 +35,8 @@ class UserRegistrationTest(APITestCase):
         second_user_data = {
             "username": "test_username",
             "password": "test_password",
+            "first_name": "test_first_name",
+            "last_name": "test_last_name",
             "email": "test_user@test.com123"
         }
         response = self.client.post(self.url, second_user_data)
@@ -40,6 +46,8 @@ class UserRegistrationTest(APITestCase):
         third_user_data = {
             "username": "test_username123",
             "password": "test_password",
+            "first_name": "test_first_name",
+            "last_name": "test_last_name",
             "email": "test_user@test.com"
         }
         response = self.client.post(self.url, third_user_data)
