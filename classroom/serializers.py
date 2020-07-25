@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from classroom.models import Classroom, Lesson, Task, Answer
-from user.serializers import TeacherSerializer, StudentSerializer
+from user.serializers import TeacherSerializer, StudentSerializer, TeacherDetailSerializer, StudentDetailSerializer
 from user.models import StudentAccount, TeacherAccount
 
 
@@ -19,6 +19,17 @@ class ClassroomCreateListSerializer(serializers.ModelSerializer):
             return super().create(validated_data)
         else:
             raise serializers.ValidationError({"detail": "Класс может быть создан только учителем."})
+
+
+class ClassroomRetrieveUpdateDestorySerializer(serializers.ModelSerializer):
+
+    students = StudentDetailSerializer(many=True, read_only=True)
+    teacher = TeacherDetailSerializer(read_only=True)
+
+    class Meta:
+        model = Classroom
+        fields = "__all__"
+
 
 class AnswerSerializer(serializers.ModelSerializer):
 
@@ -49,8 +60,6 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ['oral_part', 'name', 'tasks']
-
-#{'oral_part': 'He', 'name': 'How to..', 'tasks': [OrderedDict([('text', 'How to test?'), ('answers', [OrderedDict([('text', 'Like this!'), ('is_correct', False)]), OrderedDict([('text', 'Maybe like this?'), ('is_correct', True)])])])]}
 
     def create(self, validated_data):
         classroom_id = self.context['classroom_id']
