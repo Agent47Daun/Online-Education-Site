@@ -134,7 +134,9 @@ REST_FRAMEWORK = {
 }
 
 # Knox
-TOKEN_TTL = None  # never expired token
+REST_KNOX = {
+    "TOKEN_TTL": None  # never expired token
+}
 
 # Djoser
 DJOSER = {
