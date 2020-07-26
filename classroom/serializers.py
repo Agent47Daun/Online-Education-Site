@@ -1,3 +1,5 @@
+import copy
+
 from rest_framework import serializers
 
 from classroom.models import Classroom, Lesson, Task, Answer
@@ -22,7 +24,6 @@ class ClassroomCreateListSerializer(serializers.ModelSerializer):
 
 
 class ClassroomRetrieveUpdateDestorySerializer(serializers.ModelSerializer):
-
     students = StudentDetailSerializer(many=True, read_only=True)
     teacher = TeacherDetailSerializer(read_only=True)
 
@@ -35,7 +36,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ['text', 'is_correct',]
+        fields = ['id', 'text', 'is_correct',]
 
         extra_kwargs = {
             "is_correct": {
@@ -45,16 +46,14 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-
     answers = AnswerSerializer(many=True)
 
     class Meta:
         model = Task
-        fields = ['text', "answers"]
+        fields = ['id', 'text', "answers"]
 
 
 class LessonAddSerializer(serializers.ModelSerializer):
-
     tasks = TaskSerializer(many=True)
 
     class Meta:
@@ -92,8 +91,8 @@ class LessonAddSerializer(serializers.ModelSerializer):
 
 
 class LessonDetailSerializer(serializers.ModelSerializer):
-
     tasks = TaskSerializer(many=True)
+
     class Meta:
         model = Lesson
         fields = ['id', 'oral_part', 'name', 'tasks', 'classroom']
@@ -101,5 +100,53 @@ class LessonDetailSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "classroom": {
                 "read_only": "True"
-            }
+            },
         }
+
+    def update(self, instance, validated_data):
+        data = copy.deepcopy(validated_data)
+
+        tasks_data = data['tasks']
+        tasks = list(instance.tasks.all())
+
+        if len(tasks) > len(tasks_data):
+            raise serializers.ValidationError({"detail": "Переданных заданий меньше чем существует у данного урока."})
+
+        instance.oral_part = data['oral_part']
+        instance.name = data['name']
+
+        for task_data in tasks_data:
+            task = tasks.pop(0)
+            task.text = task_data.get('text', task.text)
+
+            answers_data = task_data.get('answers')
+            answers = list(task.answers.all())
+
+            if len(answers) > len(answers_data):
+                raise serializers.ValidationError({"detail": "Переданных вариантов ответа меньше чем существует у данного задания."})
+
+            for answer_data in answers_data:
+                answer = answers.pop(0)
+                answer.text = answer_data.get('text', answer.text)
+                answer.is_correct = answer_data.get('is_correct', answer.is_correct)
+                answer.save()
+
+            task.save()
+        instance.save()
+
+        return instance
+
+    def validate(self, validated_data):
+        data = copy.deepcopy(validated_data)
+        print(data)
+        tasks_data = data.get('tasks')
+        if not tasks_data:
+            raise serializers.ValidationError({"tasks": "Заданий не может быть меньше 1."})
+
+        for task_data in tasks_data:
+
+            answers_data = task_data.get('answers')
+            if not answers_data:
+                raise serializers.ValidationError({"answers": "Вариантов ответов не может быть меньше 1."})
+
+        return data
