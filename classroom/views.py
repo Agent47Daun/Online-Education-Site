@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 
 from classroom.models import Classroom, Lesson
-from classroom.serializers import ClassroomCreateListSerializer, LessonSerializer, ClassroomRetrieveUpdateDestorySerializer
+from classroom.serializers import ClassroomCreateListSerializer, LessonAddSerializer, ClassroomRetrieveUpdateDestorySerializer, LessonDetailSerializer
 
 
 class ClassroomCreateListApiView(generics.ListCreateAPIView):
@@ -21,7 +21,7 @@ class ClassroomCreateListApiView(generics.ListCreateAPIView):
 
 
 class ClassroomAddLesson(generics.CreateAPIView):
-    serializer_class = LessonSerializer
+    serializer_class = LessonAddSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -40,5 +40,16 @@ class ClassroomRetrieveUpdateDestroyApiView(generics.RetrieveUpdateDestroyAPIVie
             queryset = Classroom.objects.filter(teacher__id=user.teacher_account.id)
         else:
             queryset = Classroom.objects.filter(students__id=user.student_account.id)
+
+        return queryset
+
+
+class LessonRetrieveUpdateDestroyApiView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = LessonDetailSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+
+        queryset = Lesson.objects.all()
 
         return queryset

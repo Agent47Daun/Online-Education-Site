@@ -53,13 +53,19 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = ['text', "answers"]
 
 
-class LessonSerializer(serializers.ModelSerializer):
+class LessonAddSerializer(serializers.ModelSerializer):
 
     tasks = TaskSerializer(many=True)
 
     class Meta:
         model = Lesson
-        fields = ['oral_part', 'name', 'tasks']
+        fields = ['id', 'oral_part', 'name', 'tasks', 'classroom']
+
+        extra_kwargs = {
+            "classroom": {
+                "read_only": "True"
+            }
+        }
 
     def create(self, validated_data):
         classroom_id = self.context['classroom_id']
@@ -73,11 +79,27 @@ class LessonSerializer(serializers.ModelSerializer):
                 answers.append(Answer.objects.create(text=answer['text'], is_correct=answer['is_correct'], task=task_instance))
             task_instance.save()
 
+        lesson.save()
+
         return lesson
 
-    def validate(self, validated_data):      
+    def validate(self, validated_data):
         classroom_id = self.context.get("classroom_id")
         if not Classroom.objects.filter(id=classroom_id).exists():
             raise serializers.ValidationError({"detail": "Не найден класс с таким ID."}, 400)
 
         return validated_data
+
+
+class LessonDetailSerializer(serializers.ModelSerializer):
+
+    tasks = TaskSerializer(many=True)
+    class Meta:
+        model = Lesson
+        fields = ['id', 'oral_part', 'name', 'tasks', 'classroom']
+
+        extra_kwargs = {
+            "classroom": {
+                "read_only": "True"
+            }
+        }
